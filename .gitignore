@@ -1,0 +1,49 @@
+# ============================================================
+#  Weather Clock OTA · Git 忽略规则
+#  原则：凡是「编译可重建」或「可能含本机路径 / 明文凭据」的，一律不入库
+# ============================================================
+
+# ---------- Keil MDK 编译输出（★ 最重要的一条）----------
+# 编译一次会产出 160 MB+，且每个 .o / .axf 都嵌入本机绝对路径
+WeatherClock_FreeRTOS_HAL/MDK-ARM/WeatherClock_FreeRTOS_HAL/
+BootLoader_f407vet6/MDK-ARM/BootLoader_f407vet6/
+Objects/
+*.o
+*.crf
+*.axf
+*.hex
+*.lst
+*.map
+*.lnp
+*.dep
+*.iex
+*.sct
+*.build_log.htm
+*.htm
+*.Bak
+*.d
+
+# ---------- Keil 个人化配置 ----------
+# uvguix 配置文件的名字里带 Windows 用户名；DebugConfig 由 Keil 自动重建
+*.uvguix.*
+DebugConfig/
+
+# ---------- 固件二进制：默认不入库 ----------
+# .xbin / .bin 会把「编译进固件的明文凭据」（WiFi 密码、云平台 token）一并带出去
+# 若确实要发布演示固件，请先用占位凭据重新编译，再用 `git add -f` 强制加入
+*.xbin
+*.bin
+/firmware/
+
+# ---------- IDE / 工具缓存 ----------
+.vscode/
+.codebuddy/
+.idea/
+__pycache__/
+*.pyc
+
+# ---------- 本地私有配置（真实凭据，绝不入库）----------
+WeatherClock_FreeRTOS_HAL/App/app_config_local.h
+
+# ---------- 脱敏自检脚本（一旦填了真实凭据就绝不能提交）----------
+verify_no_secrets.py
